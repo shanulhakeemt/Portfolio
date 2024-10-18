@@ -15,15 +15,15 @@ class AppColors {
 
 class ButtonStyles {
   static ButtonStyle primary = ButtonStyle(
-    fixedSize: MaterialStateProperty.all(const Size(120, 50)),
+    fixedSize: WidgetStateProperty.all(const Size(120, 50)),
     overlayColor:
-        MaterialStateProperty.all(AppColors.blueAccent.withOpacity(0.1)),
-    shape: MaterialStateProperty.all(
+        WidgetStateProperty.all(AppColors.blueAccent.withOpacity(0.1)),
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
       ),
     ),
-    side: MaterialStateProperty.all(
+    side: WidgetStateProperty.all(
       const BorderSide(
         color: AppColors.blueAccent,
         width: 2.0,
@@ -33,15 +33,15 @@ class ButtonStyles {
   );
 
   static ButtonStyle resume = ButtonStyle(
-    fixedSize: MaterialStateProperty.all(const Size(120, 42)),
+    fixedSize: WidgetStateProperty.all(const Size(120, 42)),
     overlayColor:
-        MaterialStateProperty.all(AppColors.blueAccent.withOpacity(0.1)),
-    shape: MaterialStateProperty.all(
+        WidgetStateProperty.all(AppColors.blueAccent.withOpacity(0.1)),
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
       ),
     ),
-    side: MaterialStateProperty.all(
+    side: WidgetStateProperty.all(
       const BorderSide(
         color: AppColors.blueAccent,
         width: 2.0,

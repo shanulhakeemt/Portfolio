@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shanu/data/keys.dart';
 import 'package:shanu/data/text.dart';
@@ -28,13 +27,13 @@ class Intro extends StatelessWidget {
               delay: const Duration(milliseconds: 750),
               child: Image.asset(
                 'assets/profile.png',
-                width: 225,
+                width: 280,
                 fit: BoxFit.fill,
-                scale: ResponsiveWidget.isMediumScreen(context) ? 4.0 : 2.5,
+                scale: ResponsiveWidget.isMediumScreen(context) ? 4.0 : 3,
               ),
             ),
           SizedBox(
-              width: ResponsiveWidget.isAtLeastLargeScreen(context) ? 30 : 0),
+              width: ResponsiveWidget.isAtLeastLargeScreen(context) ? 70 : 0),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,11 +66,11 @@ class Intro extends StatelessWidget {
   }
 
   Widget _about() {
-    return AutoSizeText.rich(
+    return const AutoSizeText.rich(
       TextSpan(
         style: TextStyles.paragraph,
         children: <TextSpan>[
-          const TextSpan(text: IntroData.about),
+          TextSpan(text: IntroData.about),
         ],
       ),
       maxLines: 5,
