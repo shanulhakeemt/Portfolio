@@ -12,14 +12,10 @@ import 'package:shanu/widgets/responsive_widget.dart';
 import 'package:shanu/widgets/slide_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Footer extends StatefulWidget {
+
+class Footer extends StatelessWidget {
   const Footer({super.key});
 
-  @override
-  State<Footer> createState() => _FooterState();
-}
-
-class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
     return Padding(

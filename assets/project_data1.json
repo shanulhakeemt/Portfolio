@@ -23,9 +23,9 @@
         {
             "id": 4,
             "title": "Portfolio",
-            "description": "Presenting my Flutter portfolio project, showcasing skills, accomplishments, and credentials with responsive design, Bloc, and Cubit integration",
-            "url": "https://github.com/shanulhakeemt/portfolio",
-            "tags": ["Flutter", "Dart", "Cubit"]
+            "description": "A responsive personal portfolio built with Flutter and Riverpod, hosted on Firebase to seamlessly showcase skills and projects across all devices.",
+            "url": "https://github.com/shanulhakeemt/Portfolio",
+            "tags": ["Flutter", "Dart", "Riverpod"]
         },
         {
             "id": 5,
@@ -41,11 +41,6 @@
             "url": "https://github.com/shanulhakeemt/Music-App",
             "tags": ["Flutter", "Python", "Postgresql"]
         }
-
-
-
-
-
 
     ]
 }

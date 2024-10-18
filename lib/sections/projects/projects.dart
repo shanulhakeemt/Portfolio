@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:auto_animated/auto_animated.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shanu/data/keys.dart';
 import 'package:shanu/data/text.dart';
 import 'package:shanu/utils/theme.dart';
@@ -11,32 +13,29 @@ import 'package:shanu/widgets/responsive_widget.dart';
 import 'package:shanu/widgets/section_title.dart';
 import 'package:shanu/widgets/slide_animation.dart';
 
-class Projects extends StatefulWidget {
+final isChangeListProvider = StateProvider<bool>(
+  (ref) => false,
+);
+
+class Projects extends ConsumerStatefulWidget {
   const Projects({super.key});
 
   @override
-  State<Projects> createState() => _ProjectsState();
+  ConsumerState<Projects> createState() => _ProjectsState();
 }
 
-class _ProjectsState extends State<Projects> {
-  /// Show More / Show Less Button Logic
-  ///
-  /// Start with showing [condensedView] elements.
-  /// If 'Show More' is clicked, show all elements
-  /// and change button to 'Show Less'.
-  /// If 'Show Less' is clicked, reduce and show [condensedView] elements
-
-  int condensedView = 3;
-  int currentlyShown = 3;
-
-  List _projects = [];
-  final List _tempProjects = [];
-
+class _ProjectsState extends ConsumerState<Projects> {
   final options = const LiveOptions(
     delay: Duration(milliseconds: 200),
     showItemInterval: Duration(milliseconds: 100),
     showItemDuration: Duration(milliseconds: 300),
   );
+
+  void changeBool(bool isChange, WidgetRef ref) {
+    ref.read(isChangeListProvider.notifier).update(
+          (state) => isChange,
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,71 +56,74 @@ class _ProjectsState extends State<Projects> {
               title: SectionTitleData.section3Title,
             ),
           ),
-          LiveGrid.options(
-            options: options,
-            primary: true,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _tempProjects.length,
-            itemBuilder:
-                (BuildContext context, int index, Animation<double> animation) {
-              return FadeTransition(
-                opacity: Tween<double>(
-                  begin: 0,
-                  end: 1,
-                ).animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut)),
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, -0.2),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: Project(
-                    title: _projects[index]['title'],
-                    description: _projects[index]['description'],
-                    url: _projects[index]['url'],
-                    tags: _projects[index]['tags'],
-                  ),
-                ),
-              );
-            },
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isSmallScreen
-                  ? 1
-                  : isMediumScreen
-                      ? 2
+          Consumer(builder: (context, ref, child) {
+            return LiveGrid.options(
+              options: options,
+              primary: true,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: ref.watch(isChangeListProvider)
+                  ? ref.watch(getProjectsNotifierProvider).length
+                  : ref.watch(getProjectsNotifierProvider).length < 2
+                      ? 0
                       : 3,
-              childAspectRatio: 1.35 / 1.25,
-              mainAxisSpacing: 8.0,
-              crossAxisSpacing: 8.0,
-            ),
-          ),
+              itemBuilder: (BuildContext context, int index,
+                  Animation<double> animation) {
+                final projects = ref.watch(getProjectsNotifierProvider);
+                return FadeTransition(
+                  opacity: Tween<double>(
+                    begin: 0,
+                    end: 1,
+                  ).animate(CurvedAnimation(
+                      parent: animation, curve: Curves.easeOut)),
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, -0.2),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: Project(
+                      title: projects[index]['title'],
+                      description: projects[index]['description'],
+                      url: projects[index]['url'],
+                      tags: projects[index]['tags'],
+                    ),
+                  ),
+                );
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isSmallScreen
+                    ? 1
+                    : isMediumScreen
+                        ? 2
+                        : 3,
+                childAspectRatio: 1.35 / 1.25,
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 8.0,
+              ),
+            );
+          }),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 48.0),
             child: Center(
               child: FadeAnimation(
                 animationKey: Keys.projectsButton,
                 delay: const Duration(milliseconds: 50),
-                child: OutlinedButton(
-                  style: ButtonStyles.primary,
-                  child: Text(
-                    currentlyShown == _projects.length
-                        ? ButtonData.showLess
-                        : ButtonData.showMore,
-                    style: TextStyles.buttonText,
-                  ),
-                  onPressed: () => setState(() {
-                    if (currentlyShown == _projects.length) {
-                      _tempProjects.removeRange(
-                          condensedView, _projects.length);
-                      currentlyShown = condensedView;
-                    } else {
-                      _tempProjects.addAll(
-                          _projects.getRange(condensedView, _projects.length));
-                      currentlyShown = _projects.length;
-                    }
-                  }),
-                ),
+                child: Consumer(builder: (context, ref, child) {
+                  return OutlinedButton(
+                    style: ButtonStyles.primary,
+                    child: Text(
+                      ref.watch(isChangeListProvider)
+                          ? ButtonData.showLess
+                          : ButtonData.showMore,
+                      style: TextStyles.buttonText,
+                    ),
+                    onPressed: () {
+                      ref.read(isChangeListProvider.notifier).update(
+                            (state) => !state,
+                          );
+                    },
+                  );
+                }),
               ),
             ),
           ),
@@ -133,16 +135,34 @@ class _ProjectsState extends State<Projects> {
   @override
   void initState() {
     super.initState();
-    _getJsonData();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        getJsonData();
+      },
+    );
   }
 
-  Future<void> _getJsonData() async {
+  Future<void> getJsonData() async {
     final String jsonData =
-        await rootBundle.loadString('assets/project_data.json');
+        await rootBundle.loadString('assets/project_data1.json');
     final data = await jsonDecode(jsonData);
-    setState(() {
-      _projects = data["projects"];
-      _tempProjects.addAll(_projects.getRange(0, condensedView));
-    });
+    ref
+        .read(getProjectsNotifierProvider.notifier)
+        .initialUpdateList(data["projects"]);
+  }
+}
+
+final getProjectsNotifierProvider = NotifierProvider<GetProjectsNotifier, List>(
+  () => GetProjectsNotifier(),
+);
+
+class GetProjectsNotifier extends Notifier<List> {
+  void initialUpdateList(List list) {
+    state = list;
+  }
+
+  @override
+  List build() {
+    return [];
   }
 }

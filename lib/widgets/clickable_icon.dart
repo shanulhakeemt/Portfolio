@@ -1,52 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shanu/utils/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ClickableIcon extends StatefulWidget {
+class ClickableIcon extends ConsumerWidget {
   final IconData icon;
   final double iconSize;
   final Color iconColor;
   final String url;
-  const ClickableIcon(
+  ClickableIcon(
       {super.key,
       required this.icon,
       required this.iconSize,
       required this.url,
       this.iconColor = AppColors.lightGrey1});
 
-  @override
-  State<ClickableIcon> createState() => _ClickableIconState();
-}
+  final isHoverProvider = StateProvider<bool>(
+    (ref) => false,
+  );
 
-class _ClickableIconState extends State<ClickableIcon> {
-  bool _hovered = false;
-
-  void _incrementEnter(PointerEvent details) {
-    setState(() {
-      _hovered = true;
-    });
-  }
-
-  void _incrementExit(PointerEvent details) {
-    setState(() {
-      _hovered = false;
-    });
+  void changeHovering(bool isHovered, WidgetRef ref) {
+    ref.read(isHoverProvider.notifier).update(
+          (state) => isHovered,
+        );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MouseRegion(
-      onEnter: _incrementEnter,
-      onExit: _incrementExit,
-      child: IconButton(
-        padding: const EdgeInsets.all(0.0),
-        constraints: const BoxConstraints(),
-        icon: FaIcon(widget.icon),
-        iconSize: widget.iconSize,
-        color: _hovered ? AppColors.blueAccent : widget.iconColor,
-        onPressed: () => launch(widget.url),
-      ),
+      onEnter: (event) {
+        changeHovering(true, ref);
+      },
+      onExit: (event) {
+        changeHovering(false, ref);
+      },
+      child: Consumer(builder: (context, ref, child) {
+        return IconButton(
+          padding: const EdgeInsets.all(0.0),
+          constraints: const BoxConstraints(),
+          icon: FaIcon(icon),
+          iconSize: iconSize,
+          color: ref.watch(isHoverProvider) ? AppColors.blueAccent : iconColor,
+          onPressed: () => launch(url),
+        );
+      }),
     );
   }
 }

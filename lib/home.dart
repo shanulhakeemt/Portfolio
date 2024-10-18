@@ -12,7 +12,6 @@ import 'package:shanu/utils/theme.dart';
 import 'package:shanu/widgets/menu_button.dart';
 import 'package:shanu/widgets/responsive_widget.dart';
 import 'package:shanu/widgets/slide_animation.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatelessWidget {

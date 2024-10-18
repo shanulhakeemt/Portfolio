@@ -5,7 +5,6 @@ import 'package:shanu/sections/about/my_picture.dart';
 import 'package:shanu/widgets/fade_animation.dart';
 import 'package:shanu/widgets/responsive_widget.dart';
 
-
 class About extends StatelessWidget {
   const About({super.key});
 
@@ -18,23 +17,23 @@ class About extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const AboutMe(),
+               AboutMe(),
               SizedBox(
                   width: ResponsiveWidget.isAtLeastLargeScreen(context)
                       ? 80.0
                       : 0.0),
               if (ResponsiveWidget.isAtLeastLargeScreen(context))
-                const FadeAnimation(
+                FadeAnimation(
                   animationKey: Keys.myPicture,
-                  delay: Duration(milliseconds: 1000),
+                  delay: const Duration(milliseconds: 1000),
                   child: MyPicture(),
                 ),
             ],
           ),
           if (!ResponsiveWidget.isAtLeastLargeScreen(context))
-            const FadeAnimation(
+            FadeAnimation(
               animationKey: Keys.myPicture,
-              delay: Duration(milliseconds: 1000),
+              delay: const Duration(milliseconds: 1000),
               child: MyPicture(),
             ),
         ],

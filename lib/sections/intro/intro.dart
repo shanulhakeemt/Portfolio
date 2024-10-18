@@ -8,8 +8,6 @@ import 'package:shanu/widgets/fade_animation.dart';
 import 'package:shanu/widgets/responsive_widget.dart';
 import 'package:shanu/widgets/slide_animation.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 class Intro extends StatelessWidget {
   const Intro({super.key});
 
@@ -29,7 +27,7 @@ class Intro extends StatelessWidget {
               animationKey: Keys.backgroundPicture,
               delay: const Duration(milliseconds: 750),
               child: Image.asset(
-                'assets/avt.png',
+                'assets/profile.png',
                 width: 225,
                 fit: BoxFit.fill,
                 scale: ResponsiveWidget.isMediumScreen(context) ? 4.0 : 2.5,

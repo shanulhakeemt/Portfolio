@@ -13,14 +13,10 @@ import 'package:shanu/widgets/slide_animation.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-class AboutMe extends StatefulWidget {
-  const AboutMe({super.key});
+// ignore: must_be_immutable
+class AboutMe extends StatelessWidget {
+   AboutMe({super.key});
 
-  @override
-  State<AboutMe> createState() => _AboutMeState();
-}
-
-class _AboutMeState extends State<AboutMe> {
   AutoSizeGroup paragraphGroup = AutoSizeGroup();
 
   @override
@@ -114,20 +110,6 @@ class _AboutMeState extends State<AboutMe> {
   }
 
   // Widget _aboutMeParagraph4() {
-  //   return AutoSizeText.rich(
-  //     const TextSpan(
-  //       children: <TextSpan>[
-  //         TextSpan(
-  //           text: AboutMeData.paragraph4,
-  //           style: TextStyles.paragraph,
-  //         ),
-  //       ],
-  //     ),
-  //     maxLines: 2,
-  //     group: paragraphGroup,
-  //   );
-  // }
-
   Widget _recentTech(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shanu/home.dart';
 import 'package:shanu/utils/theme.dart';
 
 void main() {
-  runApp(const PersonalWebsite());
+  runApp(const ProviderScope(child: PersonalWebsite()));
 }
 
 class PersonalWebsite extends StatelessWidget {
